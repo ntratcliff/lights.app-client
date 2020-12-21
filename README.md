@@ -1,4 +1,4 @@
-# lights.app client
+# 💡.app client
 
 Frontend for lights.app
 
