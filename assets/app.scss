@@ -1,0 +1,12 @@
+@import 'node_modules/bootstrap/scss/bootstrap';
+@import 'node_modules/bootstrap-vue/src/index.scss';
+
+.full-width {
+	width: 100%;
+}
+
+.center-content {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
