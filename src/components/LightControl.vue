@@ -8,6 +8,7 @@
 			type="range"
 			min="0"
 			max="255"
+			@input="onInput"
 		/>
 	</div>
 </template>
@@ -40,7 +41,8 @@ export default {
 	data () {
 		return {
 			brightness: 0,
-			sending: false
+			sending: false,
+			input: false
 		}
 	},
 	watch: {
@@ -71,6 +73,7 @@ export default {
 	methods: {
 		updateBrightness () {
 			if (this.sending) return // don't do anything if currently sending data
+			if (this.input) return // don't do anything if currently inputting data
 
 			axios
 				.get(`${apiURL}/lights/${this.lightId}`)
@@ -78,6 +81,10 @@ export default {
 					console.log(`(${this.lightId}) From server: ${resp.data.value}`)
 					this.brightness = resp.data.value
 				})
+		},
+		onInput () {
+			this.input = true
+			setTimeout(() => { this.input = false }, 500)
 		}
 	}
 }
