@@ -47,14 +47,12 @@ export default {
 	},
 	watch: {
 		brightness (newValue) {
-			console.log(`${this.lightId}: ${newValue}`)
 			if (this.input) this.sendBrightness()
 		}
 	},
 	created () {
 		this.socket.on('lightChanged', this.lightChanged)
 		this.socket.emit('getLight', { id: this.lightId }, (light) => {
-			console.log('callback invoked')
 			this.brightness = light.value
 		})
 
