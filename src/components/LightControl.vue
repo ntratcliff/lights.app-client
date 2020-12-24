@@ -14,10 +14,7 @@
 </template>
 
 <script>
-import axios from 'axios'
 import _ from 'lodash'
-
-const apiURL = 'http://192.168.1.120:8081'
 
 export default {
 	props: {
@@ -29,9 +26,13 @@ export default {
 			type: Number,
 			required: true
 		},
+		socket: {
+			type: Object,
+			required: true
+		},
 		debounceRate: {
 			type: Number,
-			default: 50
+			default: 5
 		},
 		updateRate: {
 			type: Number,
@@ -41,50 +42,43 @@ export default {
 	data () {
 		return {
 			brightness: 0,
-			sending: false,
 			input: false
 		}
 	},
 	watch: {
 		brightness (newValue) {
 			console.log(`${this.lightId}: ${newValue}`)
-			this.sendBrightness()
+			if (this.input) this.sendBrightness()
 		}
 	},
 	created () {
-		this.sendBrightness = _.debounce(function () {
-			this.sending = true
+		this.socket.on('lightChanged', this.lightChanged)
+		this.socket.emit('getLight', { id: this.lightId }, (light) => {
+			console.log('callback invoked')
+			this.brightness = light.value
+		})
 
-			var value = this.brightness
-			var id = this.lightId
-			console.log(`(${id}) Sending ${value}...`)
-			axios.put(
-				`${apiURL}/lights/${id}`,
-				{ value: value }
-			).then(resp => {
-				console.log(`(${id}) From server: ${resp.data.value}`)
-			}).finally(() => { this.sending = false })
+		this.sendBrightness = _.debounce(function () {
+			var data = {
+				id: this.lightId,
+				value: this.brightness
+			}
+			console.log(`(${data.id}) Sending ${data.value}...`)
+			this.socket.emit('setValue', data)
 		}, this.debounceRate)
 	},
-	mounted () {
-		this.updateBrightness()
-		setInterval(() => this.updateBrightness(), this.updateRate)
-	},
 	methods: {
-		updateBrightness () {
-			if (this.sending) return // don't do anything if currently sending data
-			if (this.input) return // don't do anything if currently inputting data
-
-			axios
-				.get(`${apiURL}/lights/${this.lightId}`)
-				.then(resp => {
-					console.log(`(${this.lightId}) From server: ${resp.data.value}`)
-					this.brightness = resp.data.value
-				})
-		},
 		onInput () {
 			this.input = true
-			setTimeout(() => { this.input = false }, 500)
+			setTimeout(() => { this.input = false }, 100)
+		},
+		lightChanged (light) {
+			console.log(light)
+			console.log(`light ${light.id} changed!`)
+
+			if (!this.input && light.id === this.lightId) {
+				this.brightness = light.value
+			}
 		}
 	}
 }
