@@ -1,16 +1,13 @@
 <template>
 	<div>
 		<h1><logo /></h1>
-		<div>
-			<h2>Living Room</h2>
+		<h2>Living Room</h2>
+		<div
+			v-for="light in lights"
+			:key="light.id"
+		>
 			<light-control
-				name="North"
-				:light-id="0"
-				:socket="socket"
-			/>
-			<light-control
-				name="West"
-				:light-id="1"
+				:light="light"
 				:socket="socket"
 			/>
 		</div>
@@ -26,6 +23,7 @@ const serverAddress = 'http://192.168.1.120:8081'
 var socket = io(serverAddress, {
 	transports: ['websocket'] // websocket only to get around cors issues (this is fine)
 })
+
 socket.on('connect', () => { console.log('Socket connected!') })
 
 export default {
@@ -35,8 +33,16 @@ export default {
 	},
 	data () {
 		return {
+			lights: [],
 			socket: socket
 		}
+	},
+	created () {
+		socket.on('lights', (data) => {
+			console.log('lights:')
+			data.forEach(l => console.log(l))
+			this.lights = data
+		})
 	}
 }
 </script>

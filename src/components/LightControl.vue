@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<h3>{{ name }}</h3>
+		<h3>{{ light.name }}</h3>
 		<label for="brightness">Brightness</label>
 		<b-form-input
 			id="brightness"
@@ -18,12 +18,8 @@ import _ from 'lodash'
 
 export default {
 	props: {
-		name: {
-			type: String,
-			required: true
-		},
-		lightId: {
-			type: Number,
+		light: {
+			type: Object,
 			required: true
 		},
 		socket: {
@@ -51,14 +47,14 @@ export default {
 		}
 	},
 	created () {
+		// set initial brightness from light value
+		this.brightness = this.light.value
+
 		this.socket.on('lightChanged', this.lightChanged)
-		this.socket.emit('getLight', { id: this.lightId }, (light) => {
-			this.brightness = light.value
-		})
 
 		this.sendBrightness = _.debounce(function () {
 			var data = {
-				id: this.lightId,
+				id: this.light.id,
 				value: this.brightness
 			}
 			console.log(`(${data.id}) Sending ${data.value}...`)
@@ -73,7 +69,7 @@ export default {
 		lightChanged (light) {
 			console.log(`light ${light.id} changed!`)
 
-			if (!this.input && light.id === this.lightId) {
+			if (!this.input && light.id === this.light.id) {
 				this.brightness = light.value
 			}
 		}
