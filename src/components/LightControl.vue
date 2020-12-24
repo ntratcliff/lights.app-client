@@ -71,7 +71,6 @@ export default {
 			setTimeout(() => { this.input = false }, 100)
 		},
 		lightChanged (light) {
-			console.log(light)
 			console.log(`light ${light.id} changed!`)
 
 			if (!this.input && light.id === this.lightId) {
