@@ -1,15 +1,20 @@
 <template>
 	<div>
 		<h1><logo /></h1>
-		<h2>Living Room</h2>
 		<div
-			v-for="light in lights"
-			:key="light.id"
+			v-for="room in rooms"
+			:key="room.name"
 		>
-			<light-control
-				:light="light"
-				:socket="socket"
-			/>
+			<h2>{{ room.name }} </h2>
+			<div
+				v-for="light in room.lights"
+				:key="light.id"
+			>
+				<light-control
+					:light="light"
+					:socket="socket"
+				/>
+			</div>
 		</div>
 	</div>
 </template>
@@ -33,15 +38,15 @@ export default {
 	},
 	data () {
 		return {
-			lights: [],
+			rooms: [],
 			socket: socket
 		}
 	},
 	created () {
-		socket.on('lights', (data) => {
-			console.log('lights:')
-			data.forEach(l => console.log(l))
-			this.lights = data
+		socket.emit('getRooms', {}, (rooms) => {
+			console.log('rooms:')
+			rooms.forEach(room => console.log(room))
+			this.rooms = rooms
 		})
 	}
 }
