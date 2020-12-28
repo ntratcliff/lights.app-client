@@ -11,7 +11,6 @@ module.exports = {
 	entry: {
 		app: './src/index.js'
 	},
-
 	plugins: [
 		new HtmlWebpackPlugin({
 			title: 'Production',
@@ -26,7 +25,6 @@ module.exports = {
 		}]),
 		new VueLoaderPlugin()
 	],
-
 	resolve: {
 		extensions: ['*', '.vue', '.js', '.json'],
 		modules: [path.join(__dirname, 'src'), 'node_modules'],
@@ -39,7 +37,6 @@ module.exports = {
 			vue$: 'vue/dist/vue.common.js'
 		}
 	},
-
 	module: {
 		rules: [
 			{
@@ -73,7 +70,6 @@ module.exports = {
 			}
 		]
 	},
-
 	output: {
 		filename: '[name].js',
 		path: resolve('dist'),
