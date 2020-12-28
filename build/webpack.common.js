@@ -2,6 +2,7 @@ const path = require('path')
 const { VueLoaderPlugin } = require('vue-loader')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const Dotenv = require('dotenv-webpack')
 
 function resolve (dir) {
 	return path.join(__dirname, '..', dir)
@@ -12,6 +13,7 @@ module.exports = {
 		app: './src/index.js'
 	},
 	plugins: [
+		new Dotenv(),
 		new HtmlWebpackPlugin({
 			title: 'Production',
 			filename: 'index.html',

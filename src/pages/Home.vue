@@ -24,7 +24,7 @@ import Logo from 'components/Logo'
 import LightControl from 'components/LightControl.vue'
 import io from 'socket.io-client'
 
-const serverAddress = 'http://192.168.1.120:8081'
+const serverAddress = `${process.env.API_HOST}:${process.env.API_PORT}`
 var socket = io(serverAddress, {
 	transports: ['websocket'] // websocket only to get around cors issues (this is fine)
 })
