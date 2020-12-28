@@ -20,11 +20,13 @@ module.exports = {
 			template: 'index.html',
 			inject: 'body'
 		}),
-		new CopyWebpackPlugin([{
-			from: resolve('static/img'),
-			to: resolve('dist/static/img'),
-			toType: 'dir'
-		}]),
+		new CopyWebpackPlugin([
+			{
+				from: resolve('static'),
+				to: resolve('dist'),
+				toType: 'dir'
+			}
+		]),
 		new VueLoaderPlugin()
 	],
 	resolve: {
