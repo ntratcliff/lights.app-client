@@ -73,17 +73,17 @@ export default {
 			}).flat()
 		}
 	},
+	watch: {
+		values (values) {
+			Vue.set(this.value, 'values', values)
+		}
+	},
 	methods: {
 		addLight (light) {
 			this.values.push(light)
 		},
 		removeLight (light) {
 			this.values.splice(this.values.indexOf(light), 1)
-		}
-	},
-	watch: {
-		values (values) {
-			Vue.set(this.value, 'values', values)
 		}
 	}
 }

@@ -4,8 +4,8 @@
 		<!-- name input -->
 		<label for="name">Name</label>
 		<b-form-input
-			type="text"
 			v-model="name"
+			type="text"
 		/>
 		<div>
 			<h3>Actions</h3>
@@ -43,7 +43,9 @@
 		</div>
 		<!-- cancel button // apply button -->
 		<div class="text-right">
-			<b-button class="m-2 col-sm-4">Cancel</b-button>
+			<b-button class="m-2 col-sm-4">
+				Cancel
+			</b-button>
 			<b-button
 				class="m-2 col-sm-6"
 				variant="primary"
