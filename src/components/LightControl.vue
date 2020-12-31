@@ -1,22 +1,21 @@
 <template>
 	<div>
 		<h3>{{ light.name }}</h3>
-		<label for="brightness">Brightness</label>
-		<b-form-input
-			id="brightness"
+		<light-slider
 			v-model="brightness"
-			type="range"
-			min="0"
-			max="255"
-			@input="onInput"
+			:name="light.name"
 		/>
 	</div>
 </template>
 
 <script>
 import _ from 'lodash'
+import LightSlider from 'components/LightSlider'
 
 export default {
+	components: {
+		LightSlider
+	},
 	props: {
 		light: {
 			type: Object,

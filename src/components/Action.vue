@@ -18,7 +18,11 @@
 		/>
 
 		<!-- template based on action type -->
-		<component :is="getTypeComponent()" />
+		<component
+			:is="getTypeComponent()"
+			v-model="value"
+			:rooms="rooms"
+		/>
 	</div>
 </template>
 
@@ -29,6 +33,10 @@ export default {
 	props: {
 		value: {
 			type: Object,
+			required: true
+		},
+		rooms: {
+			type: Array,
 			required: true
 		}
 	},

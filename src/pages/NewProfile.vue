@@ -5,6 +5,7 @@
 		<label for="name">Name</label>
 		<b-form-input
 			type="text"
+			v-model="name"
 		/>
 		<div>
 			<h3>Actions</h3>
@@ -15,7 +16,8 @@
 			>
 				<action
 					v-model="actions[i]"
-					@delete="removeAction(i)"
+					:rooms="rooms"
+					@remove="removeAction(i)"
 				/>
 			</div>
 			<!-- v-for::actions -->
@@ -42,14 +44,22 @@
 		<!-- cancel button // apply button -->
 		<div class="text-right">
 			<b-button class="m-2 col-sm-4">Cancel</b-button>
-			<b-button class="m-2 col-sm-6" variant="primary">Apply</b-button>
+			<b-button
+				class="m-2 col-sm-6"
+				variant="primary"
+				@click="apply"
+			>
+				Apply
+			</b-button>
 		</div>
+		{{ profile }}
 	</div>
 </template>
 
 <script>
 import Action from 'components/Action'
 import Actions from 'components/actions/Actions'
+import socket from 'src/socket'
 
 export default {
 	components: {
@@ -57,11 +67,26 @@ export default {
 	},
 	data () {
 		return {
-			actions: [
-				{ type: 'Simple' }
-			],
+			name,
+			actions: [],
+			rooms: [],
 			actionTypes: Object.keys(Actions)
 		}
+	},
+	computed: {
+		profile () {
+			return {
+				state: {
+					name: this.name,
+					actions: this.actions
+				}
+			}
+		}
+	},
+	created () {
+		socket.emit('getRooms', null, (rooms) => {
+			this.rooms = rooms
+		})
 	},
 	methods: {
 		addAction (type) {
@@ -71,6 +96,9 @@ export default {
 		},
 		removeAction (i) {
 			this.actions.splice(i, 1)
+		},
+		apply () {
+			socket.emit('setState', this.profile)
 		}
 	}
 }
