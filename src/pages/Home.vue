@@ -1,47 +1,36 @@
 <template>
 	<div>
 		<h1><logo /></h1>
-		<div
-			v-for="room in rooms"
-			:key="room.name"
-		>
-			<h2>{{ room.name }} </h2>
-			<div
-				v-for="light in room.lights"
-				:key="light.id"
-			>
-				<light-control
-					:light="light"
-					:socket="socket"
-				/>
-			</div>
-		</div>
+		<p>Current state: {{ state.name }}</p>
 	</div>
 </template>
 
 <script>
 import Logo from 'components/Logo'
-import LightControl from 'components/LightControl.vue'
 import socket from 'src/socket'
 
 socket.on('connect', () => { console.log('Socket connected!') })
 
 export default {
 	components: {
-		Logo,
-		LightControl
+		Logo
 	},
 	data () {
 		return {
 			rooms: [],
+			state: {},
 			socket: socket
 		}
 	},
 	created () {
-		socket.emit('getRooms', {}, (rooms) => {
-			console.log('rooms:')
-			rooms.forEach(room => console.log(room))
+		socket.emit('getRooms', null, (rooms) => {
 			this.rooms = rooms
+		})
+
+		socket.emit('getState', null, (state) => {
+			console.log('Get state response:')
+			console.log(state)
+			this.state = state
 		})
 	}
 }
