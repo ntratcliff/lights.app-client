@@ -121,6 +121,8 @@ export default {
 				time.setTime(last.getTime() + next)
 			}
 
+			time.setSeconds(0)
+
 			timing.values.push({
 				time: this.dateToTime(time),
 				value: 128
