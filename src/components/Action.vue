@@ -1,21 +1,17 @@
 <template>
-	<div>
-		<!-- delete button -->
-		<b-button-close
-			@click="$emit('delete')"
-		/>
-
-		<!-- type select -->
-		<label
-			for="action-type"
-		>
-			Type
-		</label>
-		<b-form-select
-			id="action-type"
-			v-model="value.type"
-			:options="Object.keys(typeComponents)"
-		/>
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				<h4>{{ value.type }} Action</h4>
+			</div>
+			<div class="col">
+				<!-- delete button -->
+				<b-button-close
+					class="p-2 float-right"
+					@click="$emit('delete')"
+				/>
+			</div>
+		</div>
 
 		<!-- template based on action type -->
 		<component

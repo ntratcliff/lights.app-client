@@ -1,50 +1,58 @@
 <template>
 	<div>
-		<h4>Lights</h4>
-		<!-- v-for values -->
 		<hr>
+		<!-- v-for values -->
 		<div
 			v-for="(timing, ti) in timings"
 			:key="timing.id"
+			class="container"
 		>
-			<h5>{{ getLight(timing.id).room.name }}/{{ getLight(timing.id).light.name }}</h5>
-			<h6>Times</h6>
+			<label>{{ getLight(timing.id).room.name }}/{{ getLight(timing.id).light.name }}</label>
+			<hr>
 			<div
 				v-for="(v, vi) in timing.values"
 				:key="vi"
+				class="row mb-2"
 			>
-				<div class="row">
-					<!-- remove button -->
-					<div class="col">
-						<b-button-close
-							class="p-2 float-right"
-							@click="removeTime(timings[ti], vi)"
-						/>
+				<div class="col">
+					<div class="row">
+						<!-- remove button -->
+						<div class="col">
+							<b-button-close
+								class="p-2 float-right"
+								@click="removeTime(timings[ti], vi)"
+							/>
+						</div>
 					</div>
-				</div>
 
-				<div class="row">
-					<div class="col-sm-3">
-						<b-form-input
-							:id="`time-${timing.id}-${vi}`"
-							v-model="timings[ti].values[vi].time"
-							type="time"
-						/>
-					</div>
-					<div class="col-sm-9">
-						<light-slider
-							v-model="timings[ti].values[vi]"
-						/>
+					<div class="row">
+						<div class="col-sm-3">
+							<b-form-input
+								:id="`time-${timing.id}-${vi}`"
+								v-model="timings[ti].values[vi].time"
+								type="time"
+							/>
+						</div>
+						<div class="col-sm-9">
+							<light-slider
+								v-model="timings[ti].values[vi]"
+							/>
+						</div>
 					</div>
 				</div>
 			</div>
 
-			<b-button
-				variant="primary"
-				@click="addTime(timings[ti])"
-			>
-				Add
-			</b-button>
+			<hr>
+			<div class="row text-right">
+				<div class="col">
+					<b-button
+						variant="primary"
+						@click="addTime(timings[ti])"
+					>
+						Add Time
+					</b-button>
+				</div>
+			</div>
 		</div>
 		<hr>
 
@@ -52,7 +60,7 @@
 		<div class="text-right">
 			<b-dropdown
 				id="add-value"
-				text="Add"
+				text="Add Light"
 				variant="primary"
 				right
 				class="m-2"

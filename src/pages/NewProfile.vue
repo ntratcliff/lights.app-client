@@ -1,14 +1,20 @@
 <template>
 	<div>
 		<h2>New Profile</h2>
+		<hr>
 		<!-- name input -->
-		<label for="name">Name</label>
-		<b-form-input
-			v-model="name"
-			type="text"
-		/>
+		<div class="row">
+			<div class="col-3">
+				<label for="name">Name</label>
+			</div>
+			<div class="col">
+				<b-form-input
+					v-model="name"
+					type="text"
+				/>
+			</div>
+		</div>
 		<div>
-			<h3>Actions</h3>
 			<hr>
 			<div
 				v-for="(action, i) in actions"
@@ -26,7 +32,7 @@
 			<div class="text-right">
 				<b-dropdown
 					id="add-action"
-					text="Add"
+					text="Add Action"
 					variant="primary"
 					right
 					class="m-2"

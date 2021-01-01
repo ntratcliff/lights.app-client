@@ -1,6 +1,5 @@
 <template>
 	<div>
-		<h4>Lights</h4>
 		<!-- v-for values -->
 		<hr>
 		<div
@@ -15,7 +14,7 @@
 			<!-- brightness control (slider/number) -->
 			<light-slider
 				v-model="values[index]"
-				:label="light.name"
+				:label="`${getLight(light.id).room.name}/${getLight(light.id).light.name}`"
 			/>
 		</div>
 		<hr>
@@ -24,7 +23,7 @@
 		<div class="text-right">
 			<b-dropdown
 				id="add-value"
-				text="Add"
+				text="Add Light"
 				variant="primary"
 				right
 				class="m-2"
@@ -79,6 +78,9 @@ export default {
 		}
 	},
 	methods: {
+		getLight (id) {
+			return this.lights.find(l => l.light.id === id)
+		},
 		addLight (light) {
 			this.values.push(light)
 		},
