@@ -13,17 +13,27 @@
 				v-for="(v, vi) in timing.values"
 				:key="vi"
 			>
-				<!-- remove button -->
-				<b-button-close
-					@click="removeTime(timings[ti], vi)"
-				/>
+				<div class="row">
+					<!-- remove button -->
+					<div class="col">
+						<b-button-close
+							class="p-2 float-right"
+							@click="removeTime(timings[ti], vi)"
+						/>
+					</div>
+				</div>
 
-				<b-form-timepicker
-					v-model="timings[ti].values[vi].time"
-				/>
-				<light-slider
-					v-model="timings[ti].values[vi]"
-				/>
+				<div class="row">
+					<div class="col-sm-4 col-md-3">
+						<b-form-timepicker
+							v-model="timings[ti].values[vi].time"
+						/>
+					</div>
+					<light-slider
+						v-model="timings[ti].values[vi]"
+						class="col-sm-8 col-md-9"
+					/>
+				</div>
 			</div>
 
 			<b-button

@@ -7,23 +7,25 @@
 		>
 			{{ label }}
 		</label>
-		<b-form-input
-			:id="`slider-${value.id}`"
-			v-model="value.value"
-			type="range"
-			min="0"
-			max="255"
-			class="col-10 col-lg-11 p-2"
-		/>
-		<b-form-input
-			:id="`number-${value.id}`"
-			v-model="value.value"
-			type="number"
-			min="0"
-			max="255"
-			class="col-2 col-lg-1 p-2"
-			@input.native="onNumberInput($event)"
-		/>
+		<div class="col-10 col-lg-11 pl-0 pr-1">
+			<b-form-input
+				:id="`slider-${value.id}`"
+				v-model="value.value"
+				type="range"
+				min="0"
+				max="255"
+			/>
+		</div>
+		<div class="col-2 col-lg-1 pl-1 pr-0">
+			<b-form-input
+				:id="`number-${value.id}`"
+				v-model="value.value"
+				type="number"
+				min="0"
+				max="255"
+				@input.native="onNumberInput($event)"
+			/>
+		</div>
 	</div>
 </template>
 
