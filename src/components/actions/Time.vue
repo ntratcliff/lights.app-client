@@ -107,8 +107,22 @@ export default {
 			this.timings.splice(this.timings.indexOf(light), 1)
 		},
 		addTime (timing) {
+			var time = new Date()
+
+			// add 1h to previous time if present
+			if (timing.values.length > 0) {
+				const next = 60 * 60 * 1000 // 1hr in ms
+
+				var last = this.timeToDate(
+					timing.values[timing.values.length - 1].time
+				)
+
+				time = new Date()
+				time.setTime(last.getTime() + next)
+			}
+
 			timing.values.push({
-				time: '00:00:00',
+				time: this.dateToTime(time),
 				value: 128
 			})
 		},
@@ -118,11 +132,17 @@ export default {
 		// TODO: implement
 		sortTimes (timing) {
 			timing.values.sort((a, b) => {
-				var da = Date.parse('1970/01/01 ' + a.time)
-				var db = Date.parse('1970/01/01 ' + b.time)
+				var da = this.timeToDate(a.time).getTime()
+				var db = this.timeToDate(b.time).getTime()
 				var comp = da - db
 				return comp
 			})
+		},
+		timeToDate (time) {
+			return new Date('1970/01/01 ' + time)
+		},
+		dateToTime (date) {
+			return date.toTimeString().split(' ')[0]
 		}
 	}
 }
