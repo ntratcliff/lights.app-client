@@ -66,7 +66,8 @@
 					Apply
 				</b-button>
 			</div>
-			{{ profile }}
+			<!-- debug profile json view -->
+			<!-- {{ profile }} -->
 		</b-form>
 	</div>
 </template>
