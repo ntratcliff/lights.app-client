@@ -23,7 +23,7 @@
 				<action
 					v-model="actions[i]"
 					:rooms="rooms"
-					@remove="removeAction(i)"
+					@delete="removeAction(i)"
 				/>
 			</div>
 			<!-- v-for::actions -->
