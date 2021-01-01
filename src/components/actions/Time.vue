@@ -7,7 +7,8 @@
 			v-for="(timing, ti) in timings"
 			:key="timing.id"
 		>
-			<h5>Times</h5>
+			<h5>{{ getLight(timing.id).room.name }}/{{ getLight(timing.id).light.name }}</h5>
+			<h6>Times</h6>
 			<div
 				v-for="(v, vi) in timing.values"
 				:key="vi"
@@ -93,6 +94,9 @@ export default {
 		}
 	},
 	methods: {
+		getLight (id) {
+			return this.lights.find(l => l.light.id === id)
+		},
 		addLight (light) {
 			this.timings.push({
 				id: light.id,
