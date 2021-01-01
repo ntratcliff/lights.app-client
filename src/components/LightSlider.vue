@@ -2,7 +2,7 @@
 	<div class="row">
 		<label
 			v-if="label"
-			:for="id"
+			:for="`slider-${value.id}`"
 			class="col-md"
 		>
 			{{ label }}
