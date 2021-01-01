@@ -1,66 +1,73 @@
 <template>
 	<div>
-		<h2>New Profile</h2>
-		<hr>
-		<!-- name input -->
-		<div class="row">
-			<div class="col-3">
-				<label for="name">Name</label>
-			</div>
-			<div class="col">
-				<b-form-input
-					v-model="name"
-					type="text"
-				/>
-			</div>
-		</div>
-		<div>
+		<b-form
+			@submit.prevent="submit"
+		>
+			<h2>New Profile</h2>
 			<hr>
-			<div
-				v-for="(action, i) in actions"
-				:key="action.key"
-			>
-				<action
-					v-model="actions[i]"
-					:rooms="rooms"
-					@delete="removeAction(i)"
-				/>
+			<!-- name input -->
+			<div class="row">
+				<div class="col-3">
+					<label for="name">Name</label>
+				</div>
+				<div class="col">
+					<b-form-input
+						v-model="name"
+						type="text"
+						required
+					/>
+				</div>
 			</div>
-			<!-- v-for::actions -->
-			<!-- add action dropdown button -->
-			<hr>
-			<div class="text-right">
-				<b-dropdown
-					id="add-action"
-					text="Add Action"
-					variant="primary"
-					right
-					class="m-2"
+			<div>
+				<hr>
+				<div
+					v-for="(action, i) in actions"
+					:key="action.key"
 				>
-					<b-dropdown-item
-						v-for="type in actionTypes"
-						:key="type"
-						@click="addAction(type)"
+					<action
+						v-model="actions[i]"
+						:rooms="rooms"
+						@delete="removeAction(i)"
+					/>
+				</div>
+				<!-- v-for::actions -->
+				<!-- add action dropdown button -->
+				<hr>
+				<div class="text-right">
+					<b-dropdown
+						id="add-action"
+						text="Add Action"
+						variant="primary"
+						right
+						class="m-2"
 					>
-						{{ type }}
-					</b-dropdown-item>
-				</b-dropdown>
+						<b-dropdown-item
+							v-for="type in actionTypes"
+							:key="type"
+							@click="addAction(type)"
+						>
+							{{ type }}
+						</b-dropdown-item>
+					</b-dropdown>
+				</div>
 			</div>
-		</div>
-		<!-- cancel button // apply button -->
-		<div class="text-right">
-			<b-button class="m-2 col-sm-4">
-				Cancel
-			</b-button>
-			<b-button
-				class="m-2 col-sm-6"
-				variant="primary"
-				@click="apply"
-			>
-				Apply
-			</b-button>
-		</div>
-		{{ profile }}
+			<!-- cancel button // apply button -->
+			<div class="text-right">
+				<b-button
+					class="m-2 col-sm-4"
+				>
+					Cancel
+				</b-button>
+				<b-button
+					type="submit"
+					class="m-2 col-sm-6"
+					variant="primary"
+				>
+					Apply
+				</b-button>
+			</div>
+			{{ profile }}
+		</b-form>
 	</div>
 </template>
 
@@ -104,6 +111,27 @@ export default {
 		},
 		removeAction (i) {
 			this.actions.splice(i, 1)
+		},
+		submit (event) {
+			if (this.validate(event)) this.apply()
+			else return false
+		},
+		validate (event) {
+			const toastSettings = {
+				title: 'oop!',
+				autoHideDelay: 5000,
+				variant: 'warning',
+				solid: true
+			}
+
+			var profile = this.profile
+
+			if (!profile.state.actions || profile.state.actions.length === 0) {
+				this.$bvToast.toast('Please add at least one action', toastSettings)
+				return false
+			}
+
+			return true
 		},
 		apply () {
 			socket.emit('setState', this.profile)
