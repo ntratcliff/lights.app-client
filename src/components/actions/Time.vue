@@ -24,15 +24,18 @@
 				</div>
 
 				<div class="row">
-					<div class="col-sm-4 col-md-3">
-						<b-form-timepicker
+					<div class="col-sm-3">
+						<b-form-input
+							:id="`time-${timing.id}-${vi}`"
 							v-model="timings[ti].values[vi].time"
+							type="time"
 						/>
 					</div>
-					<light-slider
-						v-model="timings[ti].values[vi]"
-						class="col-sm-8 col-md-9"
-					/>
+					<div class="col-sm-9">
+						<light-slider
+							v-model="timings[ti].values[vi]"
+						/>
+					</div>
 				</div>
 			</div>
 

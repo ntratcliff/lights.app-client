@@ -7,7 +7,7 @@
 		>
 			{{ label }}
 		</label>
-		<div class="col-10 col-lg-11 pl-0 pr-1">
+		<div class="col-9 col-lg-10 pr-1">
 			<b-form-input
 				:id="`slider-${value.id}`"
 				v-model="value.value"
@@ -16,7 +16,7 @@
 				max="255"
 			/>
 		</div>
-		<div class="col-2 col-lg-1 pl-1 pr-0">
+		<div class="col-3 col-lg-2 pl-1">
 			<b-form-input
 				:id="`number-${value.id}`"
 				v-model="value.value"
