@@ -1,6 +1,11 @@
 <template>
 	<div>
-		<label :for="id">{{ label }}</label>
+		<label
+			v-if="label"
+			:for="id"
+		>
+			{{ label }}
+		</label>
 		<b-form-input
 			:id="id"
 			v-model="value.value"
@@ -20,7 +25,7 @@ export default {
 		},
 		label: {
 			type: String,
-			default: 'Brightness'
+			default: null
 		}
 	},
 	computed: {

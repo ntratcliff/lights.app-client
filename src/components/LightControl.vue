@@ -4,6 +4,7 @@
 		<light-slider
 			v-model="brightness"
 			:name="light.name"
+			label="Brightness"
 		/>
 	</div>
 </template>
