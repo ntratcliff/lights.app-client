@@ -1,7 +1,18 @@
 <template>
 	<div>
 		<h1><logo /></h1>
-		<p>Current profile: <b>{{ state.name }}</b></p>
+		<p>Current profile: <b>{{ state ? state.name : '[none]' }}</b></p>
+		<b-row>
+			<b-col>
+				<b-button
+					block
+					:disabled="!state"
+					@click="leaveCurrentState()"
+				>
+					Leave current profile
+				</b-button>
+			</b-col>
+		</b-row>
 		<h2>Lights</h2>
 		<div class="container">
 			<div
@@ -138,6 +149,9 @@ export default {
 					})
 				}
 			}).catch(this.errToast)
+		},
+		leaveCurrentState () {
+			socket.emit('leaveCurrentState')
 		},
 		errToast (err) {
 			this.$bvToast.toast(
