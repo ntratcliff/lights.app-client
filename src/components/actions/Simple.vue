@@ -42,6 +42,7 @@
 
 <script>
 import LightSlider from 'components/LightSlider.vue'
+import Vue from 'vue'
 export default {
 	components: { LightSlider },
 	props: {
@@ -65,6 +66,9 @@ export default {
 				})
 			}).flat()
 		}
+	},
+	created () {
+		if (!this.value.values) Vue.set(this.value, 'values', [])
 	},
 	methods: {
 		getLight (id) {
