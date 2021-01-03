@@ -14,6 +14,7 @@
 				type="range"
 				min="0"
 				max="255"
+				:disabled="disabled"
 			/>
 		</div>
 		<div class="col-3 col-lg-2 pl-1">
@@ -21,6 +22,7 @@
 				:id="`number-${value.id}`"
 				v-model="value.value"
 				type="number"
+				:disabled="disabled"
 				min="0"
 				max="255"
 				@input.native="onNumberInput($event)"
@@ -39,6 +41,10 @@ export default {
 		label: {
 			type: String,
 			default: null
+		},
+		disabled: {
+			type: Boolean,
+			default: false
 		}
 	},
 	methods: {

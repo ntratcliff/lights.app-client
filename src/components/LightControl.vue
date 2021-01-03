@@ -1,10 +1,10 @@
 <template>
 	<div>
-		<h3>{{ light.name }}</h3>
 		<light-slider
-			v-model="brightness"
-			:name="light.name"
-			label="Brightness"
+			v-model="value"
+			:name="value.name"
+			:label="value.name"
+			:disabled="disabled"
 		/>
 	</div>
 </template>
@@ -18,7 +18,7 @@ export default {
 		LightSlider
 	},
 	props: {
-		light: {
+		value: {
 			type: Object,
 			required: true
 		},
@@ -33,30 +33,28 @@ export default {
 		updateRate: {
 			type: Number,
 			default: 1000
+		},
+		disabled: {
+			type: Boolean,
+			default: false
 		}
 	},
 	data () {
 		return {
-			brightness: 0,
 			input: false
 		}
 	},
 	watch: {
-		brightness (newValue) {
+		value (to) {
 			if (this.input) this.sendBrightness()
 		}
 	},
 	created () {
 		// set initial brightness from light value
-		this.brightness = this.light.value
-
 		this.socket.on('lightChanged', this.lightChanged)
 
 		this.sendBrightness = _.debounce(function () {
-			var data = {
-				id: this.light.id,
-				value: this.brightness
-			}
+			var data = this.value
 			console.log(`(${data.id}) Sending ${data.value}...`)
 			this.socket.emit('setValue', data)
 		}, this.debounceRate)
@@ -69,8 +67,8 @@ export default {
 		lightChanged (light) {
 			console.log(`light ${light.id} changed!`)
 
-			if (!this.input && light.id === this.light.id) {
-				this.brightness = light.value
+			if (!this.input && light.id === this.value.id) {
+				this.value.value = light.value
 			}
 		}
 	}

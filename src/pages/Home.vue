@@ -1,7 +1,30 @@
 <template>
 	<div>
 		<h1><logo /></h1>
-		<p>Current profile: {{ state.name }}</p>
+		<p>Current profile: <b>{{ state.name }}</b></p>
+		<h2>Lights</h2>
+		<div class="container">
+			<div
+				v-for="room in rooms"
+				:key="room.name"
+				class="container"
+			>
+				<h3>{{ room.name }}</h3>
+				<div
+					v-for="(light, index) in room.lights"
+					:key="light.id"
+					class="row"
+				>
+					<div class="col">
+						<light-control
+							v-model="room.lights[index]"
+							:socket="socket"
+							disabled
+						/>
+					</div>
+				</div>
+			</div>
+		</div>
 		<h2>Profiles</h2>
 		<div
 			v-for="s in states"
@@ -39,6 +62,7 @@
 <script>
 import Logo from 'components/Logo'
 import StateButton from 'components/StateButton'
+import LightControl from 'components/LightControl'
 import socket from 'src/socket'
 
 socket.on('connect', () => { console.log('Socket connected!') })
@@ -46,7 +70,8 @@ socket.on('connect', () => { console.log('Socket connected!') })
 export default {
 	components: {
 		Logo,
-		StateButton
+		StateButton,
+		LightControl
 	},
 	data () {
 		return {
