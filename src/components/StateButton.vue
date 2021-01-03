@@ -1,7 +1,7 @@
 <template>
 	<b-dropdown
 		split
-		:text="state.name"
+		:text="fullName"
 		v-bind="$attrs"
 		@click="$emit('apply', state)"
 	>
@@ -13,7 +13,7 @@
 		</b-dropdown-item>
 		<b-dropdown-item
 			variant="primary"
-			:disabled="this.default"
+			:disabled="state.default"
 			@click="$emit('make-default', state)"
 		>
 			Set as Default
@@ -33,10 +33,11 @@ export default {
 		state: {
 			type: Object,
 			required: true
-		},
-		default: {
-			type: Boolean,
-			required: false
+		}
+	},
+	computed: {
+		fullName () {
+			return this.state.name.concat(this.state.default ? ' (Default)' : '')
 		}
 	}
 }

@@ -2,11 +2,12 @@
 	<div>
 		<h1><logo /></h1>
 		<p>Current profile: <b>{{ state ? state.name : '[none]' }}</b></p>
+		<p>Profiles in stack: <b>{{ stateStack.length }}</b></p>
 		<b-row>
 			<b-col>
 				<b-button
 					block
-					:disabled="!state"
+					:disabled="!state || stateStack.length === 1"
 					@click="leaveCurrentState()"
 				>
 					Leave current profile
@@ -89,8 +90,15 @@ export default {
 		return {
 			rooms: [],
 			state: {},
+			stateStack: [],
 			states: [],
+			defaultState: {},
 			socket: socket
+		}
+	},
+	watch: {
+		stateStack (to) {
+			this.state = to.length > 0 ? to[to.length - 1] : null
 		}
 	},
 	created () {
@@ -98,16 +106,20 @@ export default {
 			this.rooms = rooms
 		})
 
-		socket.emit('getState', null, (err, state) => {
-			if (err) this.errToast(err)
+		// socket.emit('getState', null, (err, state) => {
+		// 	if (err) this.errToast(err)
 
-			console.log('Get state response:')
-			console.log(state)
-			this.state = state
+		// 	console.log('Get state response:')
+		// 	console.log(state)
+		// 	this.state = state
+		// })
+
+		socket.emit('getStateStack', null, stack => {
+			this.stateStack = stack
 		})
 
-		socket.on('stateChanged', (state) => {
-			this.state = state
+		socket.on('stateChanged', (stack) => {
+			this.stateStack = stack
 		})
 
 		this.updateStates()
@@ -121,7 +133,9 @@ export default {
 			})
 		},
 		loadState (state) {
-			socket.emit('setState', { state: state })
+			socket.emit('setState', { state: state }, err => {
+				if (err) this.errToast(err)
+			})
 		},
 		editState (state) {
 			this.$router.push(`/profile/${state.name}`)
