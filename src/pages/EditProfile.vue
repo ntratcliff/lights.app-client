@@ -116,7 +116,8 @@ export default {
 				state: {
 					name: this.name,
 					actions: this.actions
-				}
+				},
+				replace: true
 			}
 		}
 	},
