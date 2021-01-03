@@ -3,7 +3,7 @@
 		<hr>
 		<!-- v-for values -->
 		<div
-			v-for="(timing, ti) in timings"
+			v-for="(timing, ti) in value.timings"
 			:key="timing.id"
 			class="container"
 		>
@@ -20,7 +20,7 @@
 						<div class="col">
 							<b-button-close
 								class="p-2 float-right"
-								@click="removeTime(timings[ti], vi)"
+								@click="removeTime(value.timings[ti], vi)"
 							/>
 						</div>
 					</div>
@@ -29,13 +29,13 @@
 						<div class="col-sm-3">
 							<b-form-input
 								:id="`time-${timing.id}-${vi}`"
-								v-model="timings[ti].values[vi].time"
+								v-model="value.timings[ti].values[vi].time"
 								type="time"
 							/>
 						</div>
 						<div class="col-sm-9">
 							<light-slider
-								v-model="timings[ti].values[vi]"
+								v-model="value.timings[ti].values[vi]"
 							/>
 						</div>
 					</div>
@@ -47,7 +47,7 @@
 				<div class="col">
 					<b-button
 						variant="primary"
-						@click="addTime(timings[ti])"
+						@click="addTime(value.timings[ti])"
 					>
 						Add Time
 					</b-button>
@@ -79,7 +79,6 @@
 
 <script>
 import LightSlider from 'components/LightSlider.vue'
-import Vue from 'vue'
 export default {
 	components: { LightSlider },
 	props: {
@@ -90,11 +89,6 @@ export default {
 		rooms: {
 			type: Array,
 			required: true
-		}
-	},
-	data () {
-		return {
-			timings: []
 		}
 	},
 	computed: {
@@ -109,23 +103,18 @@ export default {
 			}).flat()
 		}
 	},
-	watch: {
-		timings (timings) {
-			Vue.set(this.value, 'timings', timings)
-		}
-	},
 	methods: {
 		getLight (id) {
 			return this.lights.find(l => l.light.id === id)
 		},
 		addLight (light) {
-			this.timings.push({
+			this.value.timings.push({
 				id: light.id,
 				values: []
 			})
 		},
 		removeLight (light) {
-			this.timings.splice(this.timings.indexOf(light), 1)
+			this.value.timings.splice(this.value.timings.indexOf(light), 1)
 		},
 		addTime (timing) {
 			var time = new Date()

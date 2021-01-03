@@ -1,7 +1,7 @@
 import Home from 'pages/Home'
-import NewProfile from 'pages/NewProfile'
+import EditProfile from 'pages/EditProfile'
 
 export default [
 	{ path: '/', component: Home },
-	{ path: '/profiles/new', component: NewProfile }
+	{ path: '/profile/:name?', component: EditProfile }
 ]

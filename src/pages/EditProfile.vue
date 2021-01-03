@@ -3,7 +3,7 @@
 		<b-form
 			@submit.prevent="submit"
 		>
-			<h2>New Profile</h2>
+			<h2>Profile</h2>
 			<hr>
 			<!-- name input -->
 			<div class="row">
@@ -52,22 +52,41 @@
 				</div>
 			</div>
 			<!-- cancel button // apply button -->
-			<div class="text-right">
-				<b-button
-					class="m-2 col-sm-4"
-				>
-					Cancel
-				</b-button>
-				<b-button
-					type="submit"
-					class="m-2 col-sm-6"
-					variant="primary"
-				>
-					Apply
-				</b-button>
+			<div class="row">
+				<div class="col-sm-5">
+					<b-button
+						block
+						@click="$router.back()"
+					>
+						Cancel
+					</b-button>
+				</div>
+				<div class="col-sm-7">
+					<b-dropdown
+						text="Apply"
+						variant="primary"
+						split-button-type="submit"
+						split
+						block
+						right
+					>
+						<be-dropdown-item-button
+							type="submit"
+							name="save"
+						>
+							Save
+						</be-dropdown-item-button>
+						<be-dropdown-item-button
+							type="submit"
+							name="saveoverwrite"
+						>
+							Save (Overwrite)
+						</be-dropdown-item-button>
+					</b-dropdown>
+				</div>
 			</div>
 			<!-- debug profile json view -->
-			<!-- {{ profile }} -->
+			{{ profile }}
 		</b-form>
 	</div>
 </template>
@@ -75,11 +94,13 @@
 <script>
 import Action from 'components/Action'
 import Actions from 'components/actions/Actions'
+import ExtDropdownItemButton from 'components/bootstrap-vue-extensions/dropdown-item-button'
 import socket from 'src/socket'
 
 export default {
 	components: {
-		Action
+		Action,
+		'be-dropdown-item-button': ExtDropdownItemButton
 	},
 	data () {
 		return {
@@ -103,6 +124,18 @@ export default {
 		socket.emit('getRooms', null, (rooms) => {
 			this.rooms = rooms
 		})
+		this.name = this.$route.params.name
+
+		if (this.name) {
+			// load profile by name
+			socket.emit('getState', { name: this.name }, (err, state) => {
+				if (err) this.errToast(err)
+				else {
+					this.name = state.name
+					this.actions = state.actions
+				}
+			})
+		}
 	},
 	methods: {
 		addAction (type) {
@@ -114,7 +147,7 @@ export default {
 			this.actions.splice(i, 1)
 		},
 		submit (event) {
-			if (this.validate(event)) this.apply()
+			if (this.validate(event)) this.apply(event)
 			else return false
 		},
 		validate (event) {
@@ -134,8 +167,37 @@ export default {
 
 			return true
 		},
-		apply () {
-			socket.emit('setState', this.profile)
+		apply (event) {
+			var profile = this.profile
+
+			var save = event.submitter.name && event.submitter.name.startsWith('save')
+			var overwrite = event.submitter.name && event.submitter.name.endsWith('overwrite')
+
+			if (save) {
+				profile['save'] = save
+			}
+
+			if (overwrite) {
+				profile['overwrite'] = overwrite
+			}
+
+			socket.emit('setState', this.profile, (err) => {
+				if (err) {
+					this.errToast(err)
+				} else if (save) {
+					this.$router.back()
+				}
+			})
+		},
+		errToast (err) {
+			this.$bvToast.toast(
+				JSON.stringify(err, null, 2),
+				{
+					title: 'Error from server',
+					variant: 'danger',
+					solid: true
+				}
+			)
 		}
 	}
 }

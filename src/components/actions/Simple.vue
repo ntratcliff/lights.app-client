@@ -3,7 +3,7 @@
 		<!-- v-for values -->
 		<hr>
 		<div
-			v-for="(light, index) in values"
+			v-for="(light, index) in value.values"
 			:key="light.id"
 		>
 			<!-- remove button -->
@@ -13,7 +13,7 @@
 
 			<!-- brightness control (slider/number) -->
 			<light-slider
-				v-model="values[index]"
+				v-model="value.values[index]"
 				:label="`${getLight(light.id).room.name}/${getLight(light.id).light.name}`"
 			/>
 		</div>
@@ -42,7 +42,6 @@
 
 <script>
 import LightSlider from 'components/LightSlider.vue'
-import Vue from 'vue'
 export default {
 	components: { LightSlider },
 	props: {
@@ -53,11 +52,6 @@ export default {
 		rooms: {
 			type: Array,
 			required: true
-		}
-	},
-	data () {
-		return {
-			values: []
 		}
 	},
 	computed: {
@@ -72,20 +66,15 @@ export default {
 			}).flat()
 		}
 	},
-	watch: {
-		values (values) {
-			Vue.set(this.value, 'values', values)
-		}
-	},
 	methods: {
 		getLight (id) {
 			return this.lights.find(l => l.light.id === id)
 		},
 		addLight (light) {
-			this.values.push(light)
+			this.value.values.push(light)
 		},
 		removeLight (light) {
-			this.values.splice(this.values.indexOf(light), 1)
+			this.value.values.splice(this.values.indexOf(light), 1)
 		}
 	}
 }
