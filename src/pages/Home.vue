@@ -50,6 +50,7 @@
 					@apply="loadState"
 					@edit="editState"
 					@delete="deleteState"
+					@make-default="setDefaultState"
 				/>
 			</div>
 		</div>
@@ -138,17 +139,31 @@ export default {
 					socket.emit('deleteState', state, (err) => {
 						if (err) this.errToast(err)
 						else {
-							this.$bvToast.toast(
-								`Successfully deleted profile ${state.name}!`, {
-									variant: 'success',
-									solid: true
-								}
+							this.successToast(
+								`Successfully deleted profile ${state.name}!`
 							)
 							this.updateStates()
 						}
 					})
 				}
 			}).catch(this.errToast)
+		},
+		setDefaultState (state) {
+			this.$bvModal.msgBoxConfirm(
+				`Are you sure you want to replace the default profile with "${state.name}"?`, {
+					title: 'Are you sure?',
+					size: 'sm',
+					okVariant: 'primary',
+					centered: true
+				}
+			).then(confirm => {
+				if (confirm) {
+					socket.emit('setDefault', state, err => {
+						if (err) this.errToast(err)
+						else this.successToast('Default profile updated!')
+					})
+				}
+			})
 		},
 		leaveCurrentState () {
 			socket.emit('leaveCurrentState')
@@ -162,6 +177,12 @@ export default {
 					solid: true
 				}
 			)
+		},
+		successToast (msg) {
+			this.$bvToast.toast(msg, {
+				variant: 'success',
+				solid: true
+			})
 		}
 	}
 }

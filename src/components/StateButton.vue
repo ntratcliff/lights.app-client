@@ -12,6 +12,13 @@
 			Edit
 		</b-dropdown-item>
 		<b-dropdown-item
+			variant="primary"
+			:disabled="this.default"
+			@click="$emit('make-default', state)"
+		>
+			Set as Default
+		</b-dropdown-item>
+		<b-dropdown-item
 			variant="danger"
 			@click="$emit('delete', state)"
 		>
@@ -26,6 +33,10 @@ export default {
 		state: {
 			type: Object,
 			required: true
+		},
+		default: {
+			type: Boolean,
+			required: false
 		}
 	}
 }
