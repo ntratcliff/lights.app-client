@@ -69,17 +69,20 @@ export default {
 			this.state = state
 		})
 
-		socket.emit('getStates', null, (states) => {
-			console.log('Get states response:')
-			states.forEach(console.log)
-			this.states = states
-		})
-
 		socket.on('stateChanged', (state) => {
 			this.state = state
 		})
+
+		this.updateStates()
 	},
 	methods: {
+		updateStates () {
+			socket.emit('getStates', null, (states) => {
+				console.log('Get states response:')
+				states.forEach(console.log)
+				this.states = states
+			})
+		},
 		loadState (state) {
 			socket.emit('setState', { state: state })
 		},
@@ -87,7 +90,29 @@ export default {
 			this.$router.push(`/profile/${state.name}`)
 		},
 		deleteState (state) {
-			console.log(`TODO: implement delete (${state.name})`)
+			this.$bvModal.msgBoxConfirm(
+				`Are you sure you want to delete profile "${state.name}"?`, {
+					title: 'Are you sure?',
+					size: 'sm',
+					okVariant: 'danger',
+					centered: true
+				}
+			).then(confirm => {
+				if (confirm) {
+					socket.emit('deleteState', state, (err) => {
+						if (err) this.errToast(err)
+						else {
+							this.$bvToast.toast(
+								`Successfully deleted profile ${state.name}!`, {
+									variant: 'success',
+									solid: true
+								}
+							)
+							this.updateStates()
+						}
+					})
+				}
+			}).catch(this.errToast)
 		},
 		errToast (err) {
 			this.$bvToast.toast(
