@@ -9,9 +9,7 @@ function resolve (dir) {
 }
 
 module.exports = {
-	entry: {
-		app: './src/index.js'
-	},
+	entry: ['babel-polyfill', './src/index.js'],
 	plugins: [
 		new Dotenv(),
 		new HtmlWebpackPlugin({
