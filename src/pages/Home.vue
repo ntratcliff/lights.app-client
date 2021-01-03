@@ -122,6 +122,8 @@ export default {
 			this.stateStack = stack
 		})
 
+		socket.on('saveStatesChanged', this.updateStates)
+
 		this.updateStates()
 	},
 	methods: {
