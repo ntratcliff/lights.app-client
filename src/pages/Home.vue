@@ -69,6 +69,20 @@
 				</b-button>
 			</div>
 		</div>
+		<hr>
+		<div
+			class="row my-1"
+		>
+			<div class="col">
+				<b-button
+					variant="danger"
+					block
+					@click="resetStates"
+				>
+					Reset Active Profiles
+				</b-button>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -183,6 +197,20 @@ export default {
 		},
 		leaveCurrentState () {
 			socket.emit('leaveCurrentState')
+		},
+		resetStates () {
+			this.$bvModal.msgBoxConfirm(
+				`Are you sure you want to reset all the active states?`, {
+					title: 'Are you sure?',
+					size: 'sm',
+					okVariant: 'primary',
+					centered: true
+				}
+			).then(confirm => {
+				if (confirm) {
+					socket.emit('resetStateStack')
+				}
+			})
 		},
 		errToast (err) {
 			this.$bvToast.toast(
